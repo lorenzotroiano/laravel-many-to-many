@@ -25,8 +25,6 @@
 
         <a href="{{ route('project.edit', $project->id) }}">Modifica</a>
 
-        <!-- Mostra i dettagli del progetto -->
-        <!-- ... altre informazioni del progetto ... -->
 
         <!-- Form per confermare l'eliminazione -->
         <form method="POST" action="{{ route('project.destroy', $project->id) }}">
