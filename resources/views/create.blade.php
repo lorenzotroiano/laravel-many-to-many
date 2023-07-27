@@ -26,26 +26,22 @@
             <input type="text" name="accessibility" id="accessibility">
             <br>
 
-            <!-- Dropdown per selezionare il tipo del progetto -->
             <select name="type_id" id="type_id">
-                <!-- Itera attraverso tutti i tipi disponibili -->
                 @foreach ($types as $type)
-                    <!-- Ogni opzione ha un valore corrispondente all'ID del tipo -->
                     <option value="{{ $type->id }}">
-                        <!-- Il testo all'interno dell'opzione è il nome del tipo -->
                         {{ $type->type_name }}
                     </option>
                 @endforeach
             </select>
             <br>
-            <!-- Checkbox per selezionare le tecnologie del progetto -->
             @foreach ($technologies as $technology)
-                <!-- Ogni checkbox ha un nome (tecnologies[]) che indica un array delle tecnologie selezionate -->
-                <input type="checkbox" name="technologies[]" value="{{ $technology->id }}">
-                <!-- Il testo accanto alla checkbox è il nome della tecnologia -->
-                {{ $technology->name }}
-
-                </input>
+                <div class="form-check mx-auto" style="max-width: 300px">
+                    <input class="form-check-input" type="checkbox" value="{{ $technology->id }}" name="technologies[]"
+                        id="technology-{{ $technology->id }}">
+                    <label class="form-check-label" for="technology-{{ $technology->id }}">
+                        {{ $technology->name }}
+                    </label>
+                </div>
             @endforeach
             <!-- Bottone di submit per inviare il form -->
             <input class="my-3" type="submit" value="CREATE">

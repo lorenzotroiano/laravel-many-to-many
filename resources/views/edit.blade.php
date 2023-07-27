@@ -16,29 +16,25 @@
             <label for="description">description:</label>
             <input type="text" name="description" value="{{ $project->description }}" required>
 
-            <!-- Dropdown per selezionare il tipo del progetto -->
-            <!-- Dropdown per selezionare il tipo del progetto -->
-            <label for="type_id">Tipo:</label>
-            <select name="type_id" required>
-                <!-- Itera attraverso tutti i tipi disponibili -->
+
+            <select name="type_id" id="type_id">
                 @foreach ($types as $type)
-                    <!-- Ogni opzione ha un valore corrispondente all'ID del tipo -->
-                    <option value="{{ $type->id }}" @if ($type->id == $project->type_id) selected @endif>
-                        <!-- Il testo all'interno dell'opzione è il nome del tipo -->
+                    <option value="{{ $type->id }}" @selected($project->type->id === $type->id)>
                         {{ $type->type_name }}
                     </option>
                 @endforeach
             </select>
-
-            <!-- Checkboxes per selezionare le tecnologie del progetto -->
-            <label>Tecnologie:</label><br>
-            <!-- Itera attraverso tutte le tecnologie disponibili -->
+            <br>
             @foreach ($technologies as $technology)
-                <!-- Ogni checkbox ha un nome (tecnologies[]) che indica un array delle tecnologie selezionate -->
-                <input type="checkbox" name="technologies[]" value="{{ $technology->id }}"
-                    @if (in_array($technology->id, $project->technologies->pluck('id')->toArray())) checked @endif>
-                <!-- Il testo accanto alla checkbox è il nome della tecnologia -->
-                {{ $technology->name }}<br>
+                <div class="form-check mx-auto" style="max-width: 300px">
+                    <input class="form-check-input" type="checkbox" value="{{ $technology->id }}" name="technologies[]"
+                        id="technology-{{ $technology->id }}"
+                        @foreach ($project->technologies as $projectTech)
+                            @checked($technology -> id === $projectTech -> id) @endforeach>
+                    <label class="form-check-label" for="technology-{{ $technology->id }}">
+                        {{ $technology->name }}
+                    </label>
+                </div>
             @endforeach
 
 

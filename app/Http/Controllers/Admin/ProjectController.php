@@ -51,17 +51,8 @@ class ProjectController extends Controller
         // Recupera i dati dal form inviato
         $data = $request->all();
 
-        // Crea un nuovo progetto nel database con i dati forniti
         $project = Project::create($data);
-
-        // Collega le tecnologie selezionate al progetto tramite la tabella di collegamento
-        $project->technologies()->attach($request->input('technologies'));
-
-        // Assegna il tipo selezionato al progetto
-        $project->type()->associate($request->input('type_id'));
-
-        // Salva le modifiche
-        $project->save();
+        $project->technologies()->attach($data['technologies']);
 
         // Reindirizza all'URL della vista 'show' per visualizzare il progetto appena creato
         return redirect()->route('project.show', $project->id);
@@ -84,23 +75,21 @@ class ProjectController extends Controller
     // Aggiorna un progetto esistente nel database
     public function update(Request $request, $id)
     {
-        // Cerca il progetto nel database con l'ID specificato
-        $project = Project::findOrFail($id);
-
-        // Recupera i dati dal form inviato
         $data = $request->all();
 
-        // Aggiorna i dati del progetto con i nuovi dati forniti
+        $project = Project::findOrFail($id);
         $project->update($data);
 
-        // Collega le nuove tecnologie selezionate al progetto tramite la tabella di collegamento
-        $project->technologies()->sync($request->input('technologies'));
+        // if (array_key_exists('technologies', $data))
+        //     $project -> technologies() -> sync($data['technologies']);
+        // else
+        //     $project -> technologies() -> detach();
 
-        // Assegna il nuovo tipo selezionato al progetto
-        $project->type()->associate($request->input('type_id'));
-
-        // Salva le modifiche
-        $project->save();
+        $project->technologies()->sync(
+            array_key_exists('technologies', $data)
+                ? $data['technologies']
+                : []
+        );
 
         // Reindirizza all'URL della vista 'show' per visualizzare il progetto modificato
         return redirect()->route('project.show', $project->id);
@@ -119,6 +108,6 @@ class ProjectController extends Controller
         $project->delete();
 
         // Reindirizza all'URL della vista 'welcome' dopo l'eliminazione del progetto
-        return redirect()->route('welcome')->with('success', 'Progetto eliminato con successo!');
+        return redirect()->route('welcome');
     }
 }
