@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Type;
 use App\Models\Technology;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 
@@ -54,6 +55,11 @@ class ProjectController extends Controller
         $project = Project::create($data);
         $project->technologies()->attach($data['technologies']);
 
+        $img_path = Storage::put('uploads', $data['main_picture']);
+        $data['main_picture'] = $img_path;
+
+        $project = Project::create($data);
+
         // Reindirizza all'URL della vista 'show' per visualizzare il progetto appena creato
         return redirect()->route('project.show', $project->id);
     }
@@ -91,6 +97,18 @@ class ProjectController extends Controller
                 : []
         );
 
+        if (!array_key_exists("main_picture", $data))
+            $data['main_picture'] = $project->main_picture;
+        else {
+            if ($project->main_picture) {
+                $oldImgPath = $project->main_picture;
+                Storage::delete($oldImgPath);
+            }
+            $data['main_picture'] = Storage::put('uploads', $data['main_picture']);
+        }
+
+        $project->update($data);
+
         // Reindirizza all'URL della vista 'show' per visualizzare il progetto modificato
         return redirect()->route('project.show', $project->id);
     }
@@ -109,5 +127,17 @@ class ProjectController extends Controller
 
         // Reindirizza all'URL della vista 'welcome' dopo l'eliminazione del progetto
         return redirect()->route('welcome');
+    }
+
+    public function deletePicture($id)
+    {
+        $project = Project::findOrFail($id);
+        if ($project->main_picture) {
+            $oldImgPath = $project->main_picture;
+            Storage::delete($oldImgPath);
+        }
+        $project->main_picture = null;
+        $project->save();
+        return redirect()->route('project.show', $project->id);
     }
 }

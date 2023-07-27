@@ -1,6 +1,11 @@
 @extends('layouts.app')
 @section('content')
     <div class="container p-5">
+
+        <img src="
+            {{ asset($project->main_picture ? 'storage/' . $project->main_picture : 'storage/images/project.jpg') }}"
+            width="200px">
+
         <h1>
             &#128193; {{ $project->title }}
         </h1>
@@ -24,6 +29,14 @@
 
 
         <a href="{{ route('project.edit', $project->id) }}">Modifica</a>
+
+        @if ($project->main_picture)
+            <form class="d-inline" method="POST" action="{{ route('project.picture.delete', $project->id) }}">
+                @csrf
+                @method('DELETE')
+                <input class="btn btn-primary" type="submit" value="DELETE PICTURE">
+            </form>
+        @endif
 
 
         <!-- Form per confermare l'eliminazione -->

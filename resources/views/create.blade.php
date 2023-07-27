@@ -4,10 +4,16 @@
     <div class="container text-center">
         <h1>Create new Project</h1>
 
-        <form method="POST" action="{{ route('project.store') }}">
+        <form method="POST" action="{{ route('project.store') }}" enctype="multipart/form-data">
 
             @csrf
             @method('POST')
+
+            <label for="main_picture">Main picture</label>
+            <br>
+            <input type="file" name="main_picture" id="main_picture">
+            <br>
+
 
             <label for="title">title</label>
             <br>

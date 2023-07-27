@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('publish_date');
             $table->text('description');
             $table->boolean('accessibility');
+            $table->string('main_picture')->nullable();
 
             $table->timestamps();
         });

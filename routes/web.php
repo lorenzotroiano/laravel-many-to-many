@@ -40,7 +40,8 @@ Route::delete('/project/{id}', [ProjectController::class, 'destroy'])
     ->name('project.destroy');
 
 
-
+Route::delete('/project/{id}/picture', [ProjectController::class, 'deletePicture'])
+    ->name('project.picture.delete');
 
 // ->middleware(['auth', 'verified'])
 

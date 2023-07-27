@@ -14,6 +14,8 @@ class Project extends Model
         'publish_date',
         'description',
         'accessibility',
+        'main_picture',
+
         'type_id'
     ];
 

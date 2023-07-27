@@ -2,11 +2,19 @@
 
 @section('content')
     <div class="container text-center p-4">
-        <form method="POST" action="{{ route('project.update', $project->id) }}">
+        <form method="POST" action="{{ route('project.update', $project->id) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-            <!-- Campi di input per modificare i dettagli del progetto -->
-            <!-- ad esempio: -->
+
+            @if ($project->main_picture)
+                <img src="{{ asset('storage/' . $project->main_picture) }}" width="200px">
+                <br>
+            @endif
+            <label for="main_picture">Main picture</label>
+            <br>
+            <input type="file" name="main_picture" id="main_picture">
+            <br>
+
             <label for="title">title:</label>
             <input type="text" name="title" value="{{ $project->title }}" required>
 
